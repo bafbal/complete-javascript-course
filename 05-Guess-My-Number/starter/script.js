@@ -5,6 +5,11 @@ let highScore = 0;
 const maxScore = Number(document.querySelector('.score').textContent);
 
 document.querySelector('.check').addEventListener('click', check);
+document.addEventListener('keydown', function (event) {
+  if (event.key === 'Enter') {
+    check();
+  }
+});
 document.querySelector('.again').addEventListener('click', resetGame);
 
 let score = Number(document.querySelector('.score').textContent);
