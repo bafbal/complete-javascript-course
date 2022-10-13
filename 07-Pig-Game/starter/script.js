@@ -15,41 +15,48 @@ let totalScorePlayer1 = 0;
 let currentScorePlayer1 = 0;
 let totalScorePlayer2 = 0;
 let currentScorePlayer2 = 0;
+let gameIsOver = false;
+const scoreNeededToWin = 20;
 
 const rollDice = function () {
-  lastRolledNumber = Math.trunc(Math.random() * 5) + 1;
-  dice.src = `dice-${lastRolledNumber}.png`;
-  if (lastRolledNumber === 1) {
-    setCurrentScore(0);
-    turnPlayer();
-  } else {
-    setCurrentScore(
-      (player1Turn ? currentScorePlayer1 : currentScorePlayer2) +
-        lastRolledNumber
-    );
+  if (!gameIsOver) {
+    dice.classList.remove('hidden');
+    lastRolledNumber = Math.trunc(Math.random() * 6) + 1;
+    dice.src = `dice-${lastRolledNumber}.png`;
+    if (lastRolledNumber === 1) {
+      setCurrentScore(0);
+      turnPlayer();
+    } else {
+      setCurrentScore(
+        (player1Turn ? currentScorePlayer1 : currentScorePlayer2) +
+          lastRolledNumber
+      );
+    }
   }
 };
 
 btnRollDice.addEventListener('click', rollDice);
 
-const startNewGame = function () {
-  setCurrentScore(0);
-  setTotalScore(0);
-  turnPlayer();
-  setCurrentScore(0);
-  setTotalScore(0);
-  player1Turn = true;
-};
-
-btnNewGame.addEventListener('click', startNewGame);
-
 const holdScore = function () {
-  setTotalScore(
-    (player1Turn ? totalScorePlayer1 : totalScorePlayer2) +
-      (player1Turn ? currentScorePlayer1 : currentScorePlayer2)
-  );
-  setCurrentScore(0);
-  turnPlayer();
+  if (!gameIsOver) {
+    setTotalScore(
+      (player1Turn ? totalScorePlayer1 : totalScorePlayer2) +
+        (player1Turn ? currentScorePlayer1 : currentScorePlayer2)
+    );
+    if (
+      totalScorePlayer1 > scoreNeededToWin ||
+      totalScorePlayer2 > scoreNeededToWin
+    ) {
+      gameIsOver = true;
+      dice.classList.add('hidden');
+      totalScorePlayer1 > scoreNeededToWin
+        ? highLightWinner(0)
+        : highLightWinner(1);
+    } else {
+      setCurrentScore(0);
+      turnPlayer();
+    }
+  }
 };
 
 btnHold.addEventListener('click', holdScore);
@@ -67,5 +74,31 @@ const setTotalScore = function (newScore) {
 };
 
 const turnPlayer = function () {
+  document.querySelector('.player--1').classList.toggle('player--active');
+  document.querySelector('.player--0').classList.toggle('player--active');
   player1Turn = !player1Turn;
 };
+
+const startNewGame = function () {
+  setCurrentScore(0);
+  setTotalScore(0);
+  turnPlayer();
+  setCurrentScore(0);
+  setTotalScore(0);
+  player1Turn = true;
+  document.querySelector('.player--0').classList.add('player--active');
+  document.querySelector('.player--1').classList.remove('player--active');
+  document.querySelector('.player--0').classList.remove('player--winner');
+  document.querySelector('.player--1').classList.remove('player--winner');
+  gameIsOver = false;
+};
+
+startNewGame();
+btnNewGame.addEventListener('click', startNewGame);
+
+function highLightWinner(player) {
+  document
+    .querySelector(`.player--${player}`)
+    .classList.remove('player--active');
+  document.querySelector(`.player--${player}`).classList.add('player--winner');
+}
