@@ -31,7 +31,7 @@ const rollDice = function () {
 };
 
 btnRollDice.addEventListener('click', rollDice);
-btnRollDice.addEventListener('keydown', function (event) {
+document.addEventListener('keydown', function (event) {
   if (event.keyCode === 32) {
     event.preventDefault();
   }
@@ -60,11 +60,6 @@ const holdScore = function () {
 };
 
 btnHold.addEventListener('click', holdScore);
-btnHold.addEventListener('keydown', function (event) {
-  if (event.keyCode === 32) {
-    event.preventDefault();
-  }
-});
 document.addEventListener('keydown', function (event) {
   if (event.key === 'a' && playerOnTheMove === 0) {
     holdScore();
@@ -111,11 +106,6 @@ const startNewGame = function () {
 
 startNewGame();
 btnNewGame.addEventListener('click', startNewGame);
-btnNewGame.addEventListener('keydown', function (event) {
-  if (event.keyCode === 32) {
-    event.preventDefault();
-  }
-});
 
 function highLightWinner(player) {
   document
