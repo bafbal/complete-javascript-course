@@ -1,5 +1,5 @@
 'use strict';
-'';
+
 const btnRollDice = document.querySelector('.btn--roll');
 const btnNewGame = document.querySelector('.btn--new');
 const btnHold = document.querySelector('.btn--hold');
@@ -31,6 +31,19 @@ const rollDice = function () {
 };
 
 btnRollDice.addEventListener('click', rollDice);
+document.addEventListener('keydown', function (event) {
+  if (event.keyCode === 32) {
+    event.preventDefault();
+  }
+});
+document.addEventListener('keydown', function (event) {
+  if (event.key === 'q' && playerOnTheMove === 0) {
+    rollDice();
+  }
+  if (event.key === 'p' && playerOnTheMove === 1) {
+    rollDice();
+  }
+});
 
 const holdScore = function () {
   if (!gameIsOver) {
@@ -47,6 +60,14 @@ const holdScore = function () {
 };
 
 btnHold.addEventListener('click', holdScore);
+document.addEventListener('keydown', function (event) {
+  if (event.key === 'a' && playerOnTheMove === 0) {
+    holdScore();
+  }
+  if (event.key === 'l' && playerOnTheMove === 1) {
+    holdScore();
+  }
+});
 
 const setCurrentScore = function (newScore) {
   currentScore = newScore;
@@ -91,4 +112,6 @@ function highLightWinner(player) {
     .querySelector(`.player--${player}`)
     .classList.remove('player--active');
   document.querySelector(`.player--${player}`).classList.add('player--winner');
+  document.querySelector(`#name--${player}`).textContent =
+    document.querySelector(`#name--${player}`).textContent + '🥇';
 }
